@@ -17,7 +17,7 @@ form.addEventListener("submit", function (event) {
       if (data.token) {
         localStorage.setItem("token", data.token);
         console.log("Connecté !");
-        window.location.href = "/pages/channel.html";
+        window.location.href = "/";
       } else {
         console.error("Erreur de connexion");
       }

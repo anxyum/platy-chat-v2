@@ -17,5 +17,5 @@ function isTokenExpired(token) {
 if (isTokenExpired(localStorage.getItem("token"))) {
   document.querySelector(".login-CTA").classList.remove("hidden");
 } else {
-  window.location.href = "/pages/channel.html";
+  document.querySelector(".main-screen").classList.remove("hidden");
 }
