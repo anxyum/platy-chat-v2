@@ -14,7 +14,13 @@ function isTokenExpired(token) {
   return decoded.exp < currentTime;
 }
 
-if (isTokenExpired(localStorage.getItem("token"))) {
+console.log(localStorage.getItem("accessToken"));
+console.log(localStorage.getItem("refreshToken"));
+
+if (
+  isTokenExpired(localStorage.getItem("accessToken")) &&
+  isTokenExpired(localStorage.getItem("refreshToken"))
+) {
   document.querySelector(".login-CTA").classList.remove("hidden");
 } else {
   document.querySelector(".main-screen").classList.remove("hidden");

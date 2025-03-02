@@ -1,26 +1,28 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Inscription</title>
+    <title>Register</title>
   </head>
   <body>
-    <h2>Créer un compte</h2>
+    <h2>create an account</h2>
     <form id="registerForm">
       <input
         type="text"
         id="username"
-        placeholder="Nom d'utilisateur"
+        placeholder="Username"
         required
       />
+      <p id="username-error"></p>
       <input
         type="password"
         id="password"
-        placeholder="Mot de passe"
+        placeholder="Password"
         required
       />
-      <button type="submit">S'inscrire</button>
+      <p id="password-error"></p>
+      <button type="submit">Register</button>
     </form>
     <p>You already have an account ? <a href="./login.html">login</a></p>
     <script src="../js/register.js"></script>

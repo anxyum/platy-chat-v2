@@ -14,8 +14,9 @@ form.addEventListener("submit", function (event) {
   })
     .then((response) => response.json())
     .then((data) => {
-      if (data.token) {
-        localStorage.setItem("token", data.token);
+      if (data.accessToken) {
+        localStorage.setItem("accessToken", data.accessToken);
+        localStorage.setItem("refreshToken", data.refreshToken);
         console.log("Connecté !");
         window.location.href = "/";
       } else {

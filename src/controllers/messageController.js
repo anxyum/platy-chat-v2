@@ -1,6 +1,5 @@
-const logger = require("../utils/logger");
 const db = require("../config/database");
-const authenticateToken = require("../utils/authenticateToken");
+const { logger, authenticateToken, handleError } = require("../utils");
 
 function handleMessage(data, req, res) {
   logger.info(`handling message`);

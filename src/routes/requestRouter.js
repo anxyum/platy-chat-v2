@@ -1,22 +1,26 @@
 const path = require("path");
 const fs = require("fs");
-
-const { handleMessage } = require("../controllers/messageController");
+const { logger } = require("../utils");
+const { PUBLIC_PATH } = require("../config/env");
+const {
+  handleMessage,
+  deleteMessage,
+} = require("../controllers/messageController");
 const {
   handleLogin,
   handleRegister,
+  handleDisconnect,
+  handleRefreshToken,
 } = require("../controllers/authController");
-const logger = require("../utils/logger");
-const { PUBLIC_PATH } = require("../config/env");
 
-function handleRequest(req, res) {
+async function handleRequest(req, res) {
   try {
     switch (req.method) {
       case "GET":
-        handleGetRequest(req, res);
+        await handleGetRequest(req, res);
         break;
       case "POST":
-        handlePostRequest(req, res);
+        await handlePostRequest(req, res);
         break;
       default:
         logger.warn(`unknown request method: ${req.method}`);
@@ -58,25 +62,34 @@ function handleGetRequest(req, res) {
   });
 }
 
-function handlePostRequest(req, res) {
+async function handlePostRequest(req, res) {
   let body = "";
   req.on("data", (chunk) => {
     body += chunk;
   });
 
-  req.on("end", () => {
+  req.on("end", async () => {
     try {
       const data = JSON.parse(body);
 
       switch (req.url) {
         case "/message":
-          handleMessage(data, req, res);
+          await handleMessage(data, req, res);
+          break;
+        case "/delete":
+          await deleteMessage(data, req, res);
           break;
         case "/login":
-          handleLogin(data, req, res);
+          await handleLogin(data, req, res);
           break;
         case "/register":
-          handleRegister(data, req, res);
+          await handleRegister(data, req, res);
+          break;
+        case "/disconnect":
+          await handleDisconnect(data, req, res);
+          break;
+        case "/refresh":
+          await handleRefreshToken(data, req, res);
           break;
         default:
           logger.warn(`unknown request URL: ${req.url}`);

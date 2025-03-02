@@ -22,7 +22,8 @@ const db = new sqlite3.Database(DB_PATH, (err) => {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         username TEXT UNIQUE NOT NULL,
         displayname TEXT NOT NULL,
-        password TEXT NOT NULL
+        password TEXT NOT NULL,
+        refresh_token TEXT
       )`,
 
       `CREATE TABLE messages (
