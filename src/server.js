@@ -1,8 +1,6 @@
 const http = require("http");
-const logger = require("./utils/logger");
-
+const { logger } = require("./utils");
 const { handleRequest } = require("./routes/requestRouter");
-
 const { PORT } = require("./config/env");
 
 const server = http.createServer(async (req, res) => {
