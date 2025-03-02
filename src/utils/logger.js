@@ -1,5 +1,4 @@
 const bunyan = require("bunyan");
-const { parse } = require("dotenv");
 
 const colors = {
   INFO: "\x1b[32m", // Vert
