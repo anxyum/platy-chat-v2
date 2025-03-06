@@ -18,9 +18,19 @@
     </div>
 
     <div class="main-screen hidden">
-      <div class="main-screen-guilds"></div>
-      <div class="main-screen-guild-explorer"></div>
-      <div class="main-screen-channel"></div>
+      <div class="main-screen-guilds">
+        <ul id="guild-list"></ul>
+      </div>
+      <div class="main-screen-guild-explorer">
+        <ul id="channel-list"></ul>
+      </div>
+      <div class="main-screen-channel">
+        <ul id="message-list"></ul>
+        <form id="send-message">
+          <input id="message-input" type="text" placeholder="Message..." />
+          <button type="submit">send</button>
+        </form>
+      </div>
     </div>
 
     <script src="./js/index.js"></script>

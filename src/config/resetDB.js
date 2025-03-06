@@ -29,7 +29,6 @@ const queries = [
   )`,
 
   `CREATE TABLE messages (
-    deleted BOOLEAN DEFAULT 0,
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     author_id INTEGER,
     channel_id INTEGER NOT NULL,
@@ -92,6 +91,11 @@ async function main() {
     ["général", 1, guild.lastID]
   );
   console.log("Channel 'général' ajouté avec ID:", channel.lastID);
+
+  await db.run(
+    `INSERT INTO guild_users (guild_id, user_id) VALUES (?, ?)`,
+    [guild.lastID, user.lastID]
+  );
 }
 
 main();

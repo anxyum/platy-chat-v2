@@ -18,6 +18,7 @@ async function handleMessage(data, req, res) {
     res.end(JSON.stringify({ error: ERROR_MESSAGES.INVALID_TOKEN }));
     return;
   }
+  const userId = user.user_id;
 
   const channel = await db.get("SELECT * FROM channels WHERE id = ?", [
     data.channel_id,
@@ -32,7 +33,7 @@ async function handleMessage(data, req, res) {
 
   const member = await db.get(
     "SELECT * FROM guild_users WHERE guild_id = ? AND user_id = ?",
-    [channel.guild_id, user.user_id]
+    [channel.guild_id, userId]
   );
 
   if (!channel.public && !member) {
@@ -48,10 +49,17 @@ async function handleMessage(data, req, res) {
 
   await db.run(
     "INSERT INTO messages (content, author_id, channel_id) VALUES (?, ?, ?)",
-    [data.message, user.user_id, data.channel_id]
+    [data.message, userId, data.channel_id]
   );
   logger.info(
     `Message sent by "${user.username}" in channel "${channel.name}"`
+  );
+
+  res.writeHead(201, { "Content-Type": "application/json" });
+  res.end(
+    JSON.stringify({
+      message: "Message sent successfully",
+    })
   );
 }
 
@@ -86,9 +94,7 @@ async function deleteMessage(data, req, res) {
     return;
   }
 
-  await db.run("UPDATE messages SET deleted = 1 WHERE id = ?", [
-    data.message_id,
-  ]);
+  await db.run("DELETE FROM messages WHERE id = ?", [data.message_id]);
 }
 
 module.exports = { handleMessage, deleteMessage };
