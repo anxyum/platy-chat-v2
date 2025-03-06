@@ -26,7 +26,7 @@ $form.addEventListener("submit", async function (event) {
   const refreshToken = localStorage.getItem("refreshToken");
 
   if (!isTokenValid(token) || !checkTokenExpiration(token)) {
-    const response = await fetch("/refresh", {
+    const response = await fetch("/api/auth/refresh", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -46,7 +46,7 @@ $form.addEventListener("submit", async function (event) {
     }
   }
 
-  const response = await fetch("/message", {
+  const response = await fetch("/api/message/send", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

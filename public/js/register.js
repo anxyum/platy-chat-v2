@@ -42,7 +42,7 @@ document
         "The password must be at least 8 characters long and contain at least one letter and one number.";
     }
 
-    fetch("/register", {
+    fetch("/api/auth/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),
@@ -53,7 +53,7 @@ document
           alert("Error : " + data.error);
         } else {
           alert("You have successfully registered!");
-          fetch("/login", {
+          fetch("/api/auth/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ username, password }),
