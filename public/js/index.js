@@ -14,9 +14,6 @@ function isTokenExpired(token) {
   return decoded.exp < currentTime;
 }
 
-console.log(localStorage.getItem("accessToken"));
-console.log(localStorage.getItem("refreshToken"));
-
 if (
   isTokenExpired(localStorage.getItem("accessToken")) &&
   isTokenExpired(localStorage.getItem("refreshToken"))

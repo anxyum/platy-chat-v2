@@ -1,6 +1,6 @@
 const sqlite3 = require("sqlite3").verbose();
 const bcrypt = require("bcrypt");
-const { DB_PATH, SALT_ROUNDS } = require("./env");
+const { DB_PATH, SALT_ROUNDS, ADMIN_PASSWORD } = require("./env");
 const fs = require("fs");
 const path = require("path");
 
@@ -24,7 +24,8 @@ const queries = [
     username TEXT UNIQUE NOT NULL,
     displayname TEXT NOT NULL,
     password TEXT NOT NULL,
-    refresh_token TEXT
+    refresh_token TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
   )`,
 
   `CREATE TABLE messages (
@@ -72,7 +73,7 @@ const runQueries = async () => {
 async function main() {
   await runQueries();
 
-  const hash = bcrypt.hashSync("adminpassword", SALT_ROUNDS);
+  const hash = bcrypt.hashSync(ADMIN_PASSWORD, SALT_ROUNDS);
 
   const user = await db.run(
     `INSERT INTO users (username, displayname, password) VALUES (?, ?, ?)`,

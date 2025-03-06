@@ -7,6 +7,7 @@ const ERROR_MESSAGES = {
   MESSAGE_NOT_FOUND: "Message not found",
   ACCESS_DENIED: "Access denied",
   MESSAGE_DELETED: "Message deleted",
+  CHANNEL_NOT_FOUND: "Channel not found",
 };
 
 async function handleMessage(data, req, res) {
@@ -48,6 +49,9 @@ async function handleMessage(data, req, res) {
   await db.run(
     "INSERT INTO messages (content, author_id, channel_id) VALUES (?, ?, ?)",
     [data.message, user.user_id, data.channel_id]
+  );
+  logger.info(
+    `Message sent by "${user.username}" in channel "${channel.name}"`
   );
 }
 
