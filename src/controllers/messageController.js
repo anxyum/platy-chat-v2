@@ -11,14 +11,14 @@ const ERROR_MESSAGES = {
 };
 
 async function handleMessage(data, req, res) {
-  const user = authenticateToken(req);
-  if (!user) {
+  const decodedToken = authenticateToken(req);
+  if (!decodedToken) {
     logger.warn(ERROR_MESSAGES.INVALID_TOKEN);
     res.writeHead(401, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ error: ERROR_MESSAGES.INVALID_TOKEN }));
     return;
   }
-  const userId = user.user_id;
+  const userId = decodedToken.user_id;
 
   const channel = await db.get("SELECT * FROM channels WHERE id = ?", [
     data.channel_id,
@@ -36,6 +36,8 @@ async function handleMessage(data, req, res) {
     [channel.guild_id, userId]
   );
 
+  const user = await db.get("SELECT * FROM users WHERE id = ?", [userId]);
+
   if (!channel.public && !member) {
     logger.warn(ERROR_MESSAGES.ACCESS_DENIED);
     res.writeHead(403, { "Content-Type": "application/json" });
@@ -49,8 +51,14 @@ async function handleMessage(data, req, res) {
 
   await db.run(
     "INSERT INTO messages (content, author_id, channel_id) VALUES (?, ?, ?)",
-    [data.message, userId, data.channel_id]
+    [data.content, userId, data.channel_id]
   );
+
+  const message = await db.get(
+    "SELECT * FROM messages WHERE id = (SELECT MAX(id) FROM messages WHERE channel_id = ? AND author_id = ?)",
+    [data.channel_id, userId]
+  );
+
   logger.info(
     `Message sent by "${user.username}" in channel "${channel.name}"`
   );
@@ -58,7 +66,8 @@ async function handleMessage(data, req, res) {
   res.writeHead(201, { "Content-Type": "application/json" });
   res.end(
     JSON.stringify({
-      message: "Message sent successfully",
+      message,
+      response: "Message sent successfully",
     })
   );
 }

@@ -158,7 +158,7 @@ $messageForm.addEventListener("submit", (e) => {
     },
     body: JSON.stringify({
       channel_id: currentChannelId,
-      message: messageContent,
+      content: messageContent,
     }),
   })
     .then((res) => res.json())

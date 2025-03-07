@@ -11,22 +11,25 @@
     <title>home page</title>
   </head>
   <body>
-    <div class="login-CTA hidden">
+    <!-- <div class="login-CTA hidden">
       <h1>you are currently not connected</h1>
       <a href="./pages/login.html">login</a>
       <a href="./pages/register.html">register</a>
-    </div>
+    </div> -->
 
-    <div class="main-screen hidden">
+    <div class="main-screen">
       <div class="main-screen-guilds">
-        <ul id="guild-list"></ul>
+        <ul id="guild-list" class="main-screen-guilds-channel-list"></ul>
       </div>
       <div class="main-screen-guild-explorer">
-        <ul id="channel-list"></ul>
+        <ul
+          id="channel-list"
+          class="main-screen-guild-explorer-channel-list"
+        ></ul>
       </div>
-      <div class="main-screen-channel">
-        <ul id="message-list"></ul>
-        <form id="send-message">
+      <div class="main-screen-channel-wrapper">
+        <ul id="message-list" class="main-screen-channel-message-list"></ul>
+        <form id="send-message" class="main-screen-send-message-wrapper">
           <input id="message-input" type="text" placeholder="Message..." />
           <button type="submit">send</button>
         </form>
