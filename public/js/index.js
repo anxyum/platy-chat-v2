@@ -96,9 +96,7 @@ const token = localStorage.getItem("accessToken");
 const refreshToken = localStorage.getItem("refreshToken");
 
 if (isTokenExpired(token) && isTokenExpired(refreshToken)) {
-  document.querySelector(".login-CTA").classList.remove("hidden");
-} else {
-  document.querySelector(".main-screen").classList.remove("hidden");
+  window.href = "/pages/login.html";
 }
 
 fetch("/api/guilds", {
