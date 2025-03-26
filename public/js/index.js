@@ -23,6 +23,31 @@ function isTokenExpired(token) {
   return decoded.exp < currentTime;
 }
 
+let usersCashe = {};
+async function getUser(userId) {
+  if (usersCashe[userId]) {
+    return usersCashe[userId];
+  }
+
+  console.log("Fetching user data for user ID:", userId);
+  const response = await fetch(`/api/users/${userId}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (response.ok) {
+    const user = await response.json();
+    usersCashe[userId] = user;
+    console.log(`user data for ${userId} has been cached.`);
+    return user;
+  } else {
+    return null;
+  }
+}
+
 async function displayGuild(guildId) {
   fetch(`/api/guilds/${guildId}`, {
     method: "GET",
@@ -74,12 +99,12 @@ async function displayChannel(guildId, channelId) {
         }
       }
     })
-    .then((data) => {
+    .then(async (data) => {
       console.log(data);
       $messageList.innerHTML = "";
-      data.messages.forEach((message) => {
-        displayMessage(message);
-      });
+      for (let i = 0; i < data.messages.length; i++) {
+        await displayMessage(data.messages[i]);
+      }
     })
     .catch((error) => {
       console.error("Error fetching channel data:", error);
@@ -88,7 +113,8 @@ async function displayChannel(guildId, channelId) {
 
 async function displayMessage(message) {
   const $message = document.createElement("li");
-  $message.textContent = message.content;
+  const messageAuthor = await getUser(message.author_id);
+  $message.textContent = `${messageAuthor.displayname}: ${message.content}`;
   $messageList.appendChild($message);
 }
 

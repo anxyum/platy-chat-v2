@@ -8,6 +8,7 @@ const { authenticateToken } = require("../utils");
 
 const routes = {
   guilds,
+  users,
 };
 
 async function guilds(path, req, res) {
@@ -132,6 +133,41 @@ async function guilds(path, req, res) {
 
     res.writeHead(200, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ ...channel, messages }));
+    return;
+  }
+}
+
+async function users(path, req, res) {
+  const currentUser = authenticateToken(req);
+
+  if (!currentUser) {
+    logger.warn("Invalid token");
+    res.writeHead(401, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ error: "Invalid token" }));
+    return;
+  }
+
+  if (path.length === 0) {
+    res.writeHead(400, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ error: "Invalid request" }));
+    return;
+  } else if (path.length === 1) {
+    const userId = parseInt(path[0]);
+    if (isNaN(userId)) {
+      res.writeHead(400, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ error: "Invalid user ID" }));
+      return;
+    }
+
+    const user = await db.get("SELECT * FROM users WHERE id = ?", [userId]);
+    if (!user) {
+      res.writeHead(404, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ error: "User not found" }));
+      return;
+    }
+
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ ...user }));
     return;
   }
 }
